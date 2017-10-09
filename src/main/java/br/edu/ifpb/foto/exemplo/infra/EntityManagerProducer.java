@@ -13,6 +13,8 @@ import javax.persistence.Persistence;
  *
  * @author recursivejr
  */
+
+@EntityManagerProduces
 public class EntityManagerProducer {
     
     @Produces

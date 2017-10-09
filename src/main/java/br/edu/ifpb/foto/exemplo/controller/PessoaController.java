@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.edu.ifpb.foto.exemplo.domain;
+package br.edu.ifpb.foto.exemplo.controller;
 
-import br.edu.ifpb.foto.exemplo.infra.EntityManagerProducer;
+import br.edu.ifpb.foto.exemplo.domain.Pessoa;
 import br.edu.ifpb.foto.exemplo.infra.FotoManagement;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import javax.servlet.http.Part;
 
 /**
  *
@@ -25,21 +25,24 @@ import javax.persistence.EntityManager;
 public class PessoaController {
     
     private Pessoa pessoa = new Pessoa();
-    private File foto;
-    @Inject private EntityManager manager;
+    private Part foto;
+    @Inject
+    private EntityManager manager;
     
     public String salvar() throws IOException {
         pessoa.setFoto(FotoManagement.encodeFoto(foto));
+        manager.getTransaction().begin();
         manager.persist(pessoa);
+        manager.getTransaction().commit();
         FotoManagement.decodeFoto(pessoa.getFoto());
         return null;
     } 
 
-    public File getFoto() {
+    public Part getFoto() {
         return foto;
     }
 
-    public void setFoto(File foto) {
+    public void setFoto(Part foto) {
         this.foto = foto;
     }
 
